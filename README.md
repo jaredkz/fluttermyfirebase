@@ -11,7 +11,6 @@ In the spirit of the open source community and providing a solid basis for both 
 -
 As I am in the process of learning flutter/dart, there may be errors or broken implementation or incorrect/inaccurate documentation that I am unaware of. I make my best effort to document things clearly so you know exactly what is going on, however any suggestions or expertise will be very welcome! =) 
 - 
-Due to the modular nature of this build, it simplifies what each piece of functionality does.  That also means that if you are looking to implement something, it's as simple as looking for the file that handles the aspect you'd like (to modify). 
 
 As the focus in this project is on modularity, this allows for separation of business logic and UI elements, easy customisation of various global shared components like GlobalSnackbar, UiHelpers, TextField and CustomErrorWidget.
 
@@ -45,3 +44,4 @@ The current stage of this project is as follows:
     - Authentication persistence on module switch from Auth (module disposed on successful login) to the Home module.
 
 ### TO-DO:
+- Implement Firebase Cloud Firestore (data persistence and storage)
