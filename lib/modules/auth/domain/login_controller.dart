@@ -2,16 +2,23 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class LoginController {
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth _firebaseAuth;
+
+  LoginController({FirebaseAuth? firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
   Future<void> login(String email, String password) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
-          email: email, password: password);
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
       Modular.to.navigate('/home/'); // Navigate to Home on success.
     } on FirebaseAuthException catch (e) {
-      // Convert FirebaseAuthException to a more user-friendly message.
-      throw Exception(_parseFirebaseAuthException(e));
+      // Use the original exception's message for a user-friendly error.
+      final errorMessage = _parseFirebaseAuthException(e);
+      print(errorMessage); // Optionally log the error message for debugging.
+      rethrow; // Rethrow the original exception.
     }
   }
 

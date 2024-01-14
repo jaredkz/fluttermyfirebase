@@ -6,9 +6,14 @@ class AuthController extends Disposable {
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   StreamSubscription<User?>? authStateSubscription;
 
-  // StreamController for error messages
+  // StreamController for error messages.
   StreamController<String> errorController =
       StreamController<String>.broadcast();
+
+  // Stream for external components to listen to.
+  Stream<String> get errorStream => errorController.stream;
+
+  User? get currentUser => firebaseAuth.currentUser;
 
   AuthController() {
     authStateSubscription = firebaseAuth.authStateChanges().listen(
@@ -20,16 +25,11 @@ class AuthController extends Disposable {
         }
       },
       onError: (error) {
-        // Broadcast the error
+        // Broadcast the error.
         errorController.add('Error in auth state stream: $error');
       },
     );
   }
-
-  // Stream for external components to listen to
-  Stream<String> get errorStream => errorController.stream;
-
-  User? get currentUser => firebaseAuth.currentUser;
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();
@@ -37,7 +37,6 @@ class AuthController extends Disposable {
 
   @override
   void dispose() {
-    //  authStateSubscription?.cancel();
     errorController.close();
   }
 }

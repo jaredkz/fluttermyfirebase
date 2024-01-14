@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:fluttermyfirebase/shared/components/ui_helpers.dart';
+import 'package:fluttermyfirebase/shared/components/ui_utils.dart';
 import 'package:fluttermyfirebase/shared/components/button.dart';
-import 'package:fluttermyfirebase/shared/components/textfield.dart';
+import 'package:fluttermyfirebase/shared/components/global_textfield.dart';
 import '../domain/register_controller.dart';
-import 'package:fluttermyfirebase/shared/components/global_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -14,6 +13,7 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   final _userNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _pwController = TextEditingController();
@@ -21,38 +21,25 @@ class _RegisterPageState extends State<RegisterPage> {
   final _registerController = Modular.get<RegisterController>();
 
   void registerUser() async {
-    if (!validateForm()) return;
-
-    try {
-      await _registerController.registerUser(
-        _userNameController.text,
-        _emailController.text,
-        _pwController.text,
-      );
-      // Check if the widget is still in the tree
-      if (mounted) {
-        GlobalSnackbar.showSuccess(context, 'Registration successful');
-        // Optionally navigate or perform other actions.
-      }
-    } catch (e) {
-      if (mounted) {
-        GlobalSnackbar.showError(
-            context, 'Registration failed: ${e.toString()}');
+    if (_formKey.currentState!.validate()) {
+      try {
+        await _registerController.registerUser(
+          _userNameController.text,
+          _emailController.text,
+          _pwController.text,
+        );
+        if (mounted) {
+          GlobalSnackbar.showSuccess(context, 'Registration successful');
+        }
+      } catch (e) {
+        if (mounted) {
+          GlobalSnackbar.showError(
+            context,
+            'Registration failed: ${e.toString()}',
+          );
+        }
       }
     }
-  }
-
-  bool validateForm() {
-    if (_userNameController.text.isEmpty ||
-        _emailController.text.isEmpty ||
-        _pwController.text.isEmpty ||
-        _pwController.text != _confirmPwController.text) {
-      showSnackbar(context, 'Please check your input fields');
-
-      return false;
-    }
-
-    return true;
   }
 
   @override
@@ -71,49 +58,53 @@ class _RegisterPageState extends State<RegisterPage> {
         child: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(25.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 25),
-                const Text('Log In', style: TextStyle(fontSize: 20)),
-                const SizedBox(height: 50),
-                MyTextField(
-                  controller: _userNameController,
-                  hintText: "Username",
-                  obscureText: false,
-                ),
-                const SizedBox(height: 10),
-                MyTextField(
-                  controller: _emailController,
-                  hintText: "Email",
-                  obscureText: false,
-                ),
-                const SizedBox(height: 10),
-                MyTextField(
-                  controller: _pwController,
-                  hintText: "Password",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 10),
-                MyTextField(
-                  controller: _confirmPwController,
-                  hintText: "Confirm Password",
-                  obscureText: true,
-                ),
-                const SizedBox(height: 25),
-                MyButton(text: "REGISTER", onTap: registerUser),
-                const SizedBox(height: 25),
-                GestureDetector(
-                  child: Text(
-                    "Already have an account? Login here",
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      decoration: TextDecoration.underline,
-                    ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 25),
+                  const Text('Log In', style: TextStyle(fontSize: 20)),
+                  const SizedBox(height: 50),
+                  GlobalTextField(
+                    controller: _userNameController,
+                    hintText: "Name",
                   ),
-                  onTap: () => Modular.to.navigate('/'),
-                ),
-              ],
+                  const SizedBox(height: 10),
+                  GlobalTextField(
+                    controller: _emailController,
+                    hintText: "Email",
+                    validator: GlobalTextField.validEmail(),
+                  ),
+                  const SizedBox(height: 10),
+                  GlobalTextField(
+                    controller: _pwController,
+                    hintText: "Password",
+                    obscureText: true,
+                    validator: GlobalTextField.validPassword(),
+                  ),
+                  const SizedBox(height: 10),
+                  GlobalTextField(
+                    controller: _confirmPwController,
+                    hintText: "Confirm Password",
+                    obscureText: true,
+                    validator: GlobalTextField.comparePasswords(_pwController),
+                  ),
+                  const SizedBox(height: 25),
+                  MyButton(onTap: registerUser, text: "REGISTER"),
+                  const SizedBox(height: 25),
+                  GestureDetector(
+                    child: Text(
+                      "Already have an account? Login here",
+                      style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    onTap: () => Modular.to.navigate('/'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

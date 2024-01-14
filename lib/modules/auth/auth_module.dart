@@ -10,7 +10,7 @@ class AuthModule extends Module {
   void binds(i) {
     i.add<LoginController>(LoginController.new);
     i.add<RegisterController>(RegisterController.new);
-    // Add other binds as needed
+    // Add other binds as needed.
   }
 
   @override
@@ -18,6 +18,6 @@ class AuthModule extends Module {
     r.child('/', child: (context) => const LoginPage());
     r.child('/register', child: (context) => const RegisterPage());
     r.child('/forgot-password', child: (context) => const ForgotPasswordPage());
-    // Add other routes as needed
+    // Add other routes as needed.
   }
 }

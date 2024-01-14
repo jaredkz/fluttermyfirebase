@@ -4,7 +4,7 @@ import '../../auth/domain/auth_controller.dart'; // Import AuthController
 import '../../auth/domain/logout_controller.dart'; // Import LogoutController
 
 class HomePage extends StatelessWidget {
-  HomePage({super.key});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,6 @@
 # Flutter My Firebase
-#### Current release: FMF V1.0 Jan 2024 preliminary release
+- First release: 12th Jan 2024
+#### Current release: FMF V1.0.1 Jan 14 2024 preliminary release
 
 ## Global goal: 
 
@@ -33,7 +34,6 @@ As the focus in this project is on modularity, this allows for separation of bus
 
  The point of this project is to create a rock-solid foundation with firebase integration and error handling ready to go. Only tested on Web and Android.
 
-#### This project will be updated in stages.  
 
 The current stage of this project is as follows:
 
@@ -42,6 +42,31 @@ The current stage of this project is as follows:
     - Modular disposal of the AuthModule once authentication has succeeded - YES
     - Login page, register page, forgot password page; all functional (only basic UI at this stage.)
     - Authentication persistence on module switch from Auth (module disposed on successful login) to the Home module.
+    - Global error handling and display through GlobalSnackbar and CustomErrorWidget snackbar display.
+    - Validation using a global version of Validatorless to ensure sanitised input and catch potential problems before form submission.
+    
 
-### TO-DO:
-- Implement Firebase Cloud Firestore (data persistence and storage)
+### Changelog
+FMF v1.0.1
+- Improved error reporting to show snackbar with a specific error message when possible.
+- Added validatorless globally for email, password (min 6, max 30), and isSamePassword for confirmation.
+- Added DevicePreview for debug mode to simulate what the app would look like across various platforms.
+- Various code improvements/linting.
+
+FMF v1.0.0 INITIAL BUILD
+Firebase authentication working.
+
+### Installation instructions:
+0. Open this project in your console/command line and run flutter pub get
+1. Make sure Firestore is installed.
+2. Go to your firebase console (https://console.firebase.google.com/) and create a new project.
+3. Type firebase login into your command prompt/terminal in this project.
+Make sure it's logged in with the same email as your firebase console. 
+Make sure the CLI is activated by typing:
+dart pub global activate flutterfire_cli
+Then finally type the following command to pick your project:
+flutterfire configure
+4. In your firebase console, go to authentication and enable the email provider.
+5. In your firebase console, go to firestore database and create a new database. Make sure to go to the rules and change the 'write' rule from 'false' to 'true'
+
+That's it! Enjoy!
