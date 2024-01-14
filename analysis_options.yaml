@@ -8,9 +8,6 @@
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 include: package:flutter_lints/flutter.yaml
-dart_code_metrics:
-  extends:
-    - package:dart_code_metrics_presets/all.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
